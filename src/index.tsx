@@ -1,34 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import { App } from "./components/App";
+import { reducers } from "./reducers";
 
-interface AppProps {
-  color?: string;
-}
+const store = createStore(reducers, applyMiddleware(thunk));
 
-interface AppState {
-  counter: number;
-}
-
-class App extends React.Component<AppProps, AppState> {
-  constructor(props: AppProps) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div>
-        <button onClick={this.onIncrement}>Increment</button>
-        <button onClick={this.onDecrement}>Decrement</button>
-        <div>{this.state.counter}</div>
-      </div>
-    );
-  }
-  onDecrement = (): void => {
-    this.setState({ counter: this.state.counter - 1 });
-  };
-  onIncrement = (): void => {
-    this.setState({ counter: this.state.counter + 1 });
-  };
-}
-
-ReactDOM.render(<App color="red" />, document.querySelector("#root"));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.querySelector("#root")
+);
